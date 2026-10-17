@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Commerce Flow — inventory & order management system" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Commerce Flow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--
+      Applied before first paint to avoid a flash of the wrong theme/locale.
+      Keep the storage keys in sync with src/store/theme.js and src/i18n.
+    -->
+    <script>
+      (function () {
+        try {
+          var root = document.documentElement
+          var theme = localStorage.getItem('cf-theme') || 'system'
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          var isDark = theme === 'dark' || (theme === 'system' && prefersDark)
+          root.classList.toggle('dark', isDark)
+
+          var lang = localStorage.getItem('cf-lang') || 'en'
+          var rtl = lang === 'ar'
+          root.setAttribute('lang', lang)
+          root.setAttribute('dir', rtl ? 'rtl' : 'ltr')
+        } catch (e) {
+          /* ignore */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "كومرس فلو",
+    "tagline": "إدارة المخزون والطلبات"
+  },
+  "common": {
+    "loading": "جارٍ التحميل…",
+    "retry": "إعادة المحاولة",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "create": "إنشاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "search": "بحث",
+    "actions": "إجراءات",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "error": "حدث خطأ ما",
+    "empty": "لا يوجد شيء بعد",
+    "yes": "نعم",
+    "no": "لا",
+    "all": "الكل",
+    "page": "صفحة {{page}} من {{total}}",
+    "showing": "عرض {{count}} من {{total}}"
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "catalog": "الكتالوج",
+    "products": "المنتجات",
+    "categories": "الفئات",
+    "suppliers": "المورّدون",
+    "orders": "الطلبات",
+    "saleOrders": "طلبات البيع",
+    "purchaseOrders": "طلبات الشراء",
+    "inventory": "المخزون",
+    "reports": "التقارير",
+    "administration": "الإدارة",
+    "users": "المستخدمون",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signOut": "تسجيل الخروج",
+    "signInSubtitle": "سجّل الدخول إلى حسابك للمتابعة",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "signingIn": "جارٍ تسجيل الدخول…",
+    "welcomeBack": "مرحبًا بعودتك",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "sessionExpired": "انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.",
+    "loggedOut": "تم تسجيل خروجك"
+  },
+  "theme": {
+    "label": "المظهر",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام",
+    "toggle": "تبديل المظهر"
+  },
+  "language": {
+    "label": "اللغة",
+    "en": "English",
+    "ar": "العربية",
+    "toggle": "تغيير اللغة"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحبًا، {{name}}",
+    "subtitle": "هذا ما يجري في متجرك."
+  },
+  "errors": {
+    "notFoundTitle": "الصفحة غير موجودة",
+    "notFoundBody": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "goHome": "الذهاب إلى لوحة التحكم",
+    "server": "خطأ في الخادم. يرجى المحاولة مرة أخرى.",
+    "network": "تعذّر الوصول إلى الشبكة. تحقق من اتصالك."
+  }
+}

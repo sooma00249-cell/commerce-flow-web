@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "Commerce Flow",
+    "tagline": "Inventory & order management"
+  },
+  "common": {
+    "loading": "Loading…",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "actions": "Actions",
+    "close": "Close",
+    "back": "Back",
+    "error": "Something went wrong",
+    "empty": "Nothing here yet",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "page": "Page {{page}} of {{total}}",
+    "showing": "Showing {{count}} of {{total}}"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "catalog": "Catalog",
+    "products": "Products",
+    "categories": "Categories",
+    "suppliers": "Suppliers",
+    "orders": "Orders",
+    "saleOrders": "Sale Orders",
+    "purchaseOrders": "Purchase Orders",
+    "inventory": "Inventory",
+    "reports": "Reports",
+    "administration": "Administration",
+    "users": "Users",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signInSubtitle": "Sign in to your account to continue",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "signingIn": "Signing in…",
+    "welcomeBack": "Welcome back",
+    "invalidCredentials": "Invalid email or password",
+    "sessionExpired": "Your session expired. Please sign in again.",
+    "loggedOut": "You have been signed out"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggle": "Toggle theme"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "ar": "العربية",
+    "toggle": "Change language"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {{name}}",
+    "subtitle": "Here is what is happening across your store."
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you are looking for does not exist or has moved.",
+    "goHome": "Go to dashboard",
+    "server": "Server error. Please try again.",
+    "network": "Network unreachable. Check your connection."
+  }
+}
