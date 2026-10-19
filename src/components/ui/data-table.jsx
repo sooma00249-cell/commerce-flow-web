@@ -105,6 +105,8 @@ function StatusPanel({ variant = 'empty', message, action }) {
  *   `meta: { primary: true }`   → card title
  *   `meta: { subtitle: true }`  → card subtitle
  *   `meta: { hideOnMobile: true }` → omitted from the card layout
+ *   `meta: { actions: true }`   → pinned to the card's trailing edge (kept out
+ *                                 of the clickable body so it can hold buttons)
  *
  * Pagination/sorting are controlled when you pass both the value and the change
  * handler (required for server-side data via `manual`); otherwise internal
@@ -298,7 +300,9 @@ export function DataTable({
       {!showSkeleton && rows.length > 0 ? (
         <ul className="divide-y md:hidden">
           {rows.map((row) => {
-            const cells = row.getVisibleCells()
+            const visibleCells = row.getVisibleCells()
+            const actionCells = visibleCells.filter((cell) => cell.column.columnDef.meta?.actions)
+            const cells = visibleCells.filter((cell) => !cell.column.columnDef.meta?.actions)
             const primary = cells.find((cell) => cell.column.columnDef.meta?.primary) || cells[0]
             const subtitle = cells.find((cell) => cell.column.columnDef.meta?.subtitle)
             const rest = cells.filter(
@@ -307,37 +311,54 @@ export function DataTable({
                 cell !== subtitle &&
                 !cell.column.columnDef.meta?.hideOnMobile,
             )
-            return (
-              <li key={row.id}>
-                <button
-                  type="button"
-                  onClick={onRowClick ? () => onRowClick(row.original) : undefined}
-                  disabled={!onRowClick}
-                  className="flex w-full flex-col gap-1.5 px-4 py-3 text-start outline-none focus-visible:bg-accent disabled:cursor-default"
-                >
-                  <span className="font-medium">
-                    {flexRender(primary.column.columnDef.cell, primary.getContext())}
+            const body = (
+              <>
+                <span className="font-medium">
+                  {flexRender(primary.column.columnDef.cell, primary.getContext())}
+                </span>
+                {subtitle ? (
+                  <span className="text-sm text-muted-foreground">
+                    {flexRender(subtitle.column.columnDef.cell, subtitle.getContext())}
                   </span>
-                  {subtitle ? (
-                    <span className="text-sm text-muted-foreground">
-                      {flexRender(subtitle.column.columnDef.cell, subtitle.getContext())}
-                    </span>
-                  ) : null}
-                  {rest.length > 0 ? (
-                    <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
-                      {rest.map((cell) => (
-                        <div key={cell.id} className="contents">
-                          <dt className="text-muted-foreground">
-                            {flexRender(cell.column.columnDef.header, cell.getContext())}
-                          </dt>
-                          <dd className="text-end">
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
-                  ) : null}
-                </button>
+                ) : null}
+                {rest.length > 0 ? (
+                  <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+                    {rest.map((cell) => (
+                      <div key={cell.id} className="contents">
+                        <dt className="text-muted-foreground">
+                          {flexRender(cell.column.columnDef.header, cell.getContext())}
+                        </dt>
+                        <dd className="text-end">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
+              </>
+            )
+            return (
+              <li key={row.id} className="flex items-start gap-2 px-4 py-3">
+                {onRowClick ? (
+                  <button
+                    type="button"
+                    onClick={() => onRowClick(row.original)}
+                    className="flex min-w-0 flex-1 flex-col gap-1.5 text-start outline-none focus-visible:bg-accent"
+                  >
+                    {body}
+                  </button>
+                ) : (
+                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">{body}</div>
+                )}
+                {actionCells.length > 0 ? (
+                  <div className="flex shrink-0 items-center">
+                    {actionCells.map((cell) => (
+                      <div key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </li>
             )
           })}

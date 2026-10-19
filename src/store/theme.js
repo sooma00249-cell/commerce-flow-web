@@ -10,7 +10,8 @@ function systemPrefersDark() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
-function resolveIsDark(theme) {
+/** Whether a preference resolves to dark right now (handles 'system'). */
+export function resolveIsDark(theme) {
   return theme === 'dark' || (theme === 'system' && systemPrefersDark())
 }
 

@@ -16,6 +16,8 @@ import {
 import { Logo } from '@/components/common/Logo'
 import { authApi } from '@/lib/api/endpoints'
 import { useAuthStore } from '@/store/auth'
+console.log('navigator');
+console.log(navigator);
 
 function initials(user) {
   if (!user) return '?'

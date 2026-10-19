@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { ConfirmDialog } from './confirm-dialog'
 
 /**
@@ -11,11 +11,11 @@ import { ConfirmDialog } from './confirm-dialog'
 export function useConfirm() {
   const [state, setState] = useState(null)
 
-  function confirm({ title, description, confirmLabel, destructive = true }) {
+  const confirm = useCallback(({ title, description, confirmLabel, destructive = true }) => {
     return new Promise((resolve) => {
       setState({ title, description, confirmLabel, destructive, resolve })
     })
-  }
+  }, [])
 
   function handleOpenChange(next) {
     if (!next && state) {

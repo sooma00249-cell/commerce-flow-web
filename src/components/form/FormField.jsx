@@ -3,6 +3,8 @@ import { AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 /**
  * Label + control + hint/error. Wires `aria-invalid` and `aria-describedby`
@@ -65,6 +67,88 @@ export const TextField = forwardRef(function TextField(
     </FormField>
   )
 })
+
+/** Multi-line text field, same wiring as {@link TextField}. */
+export const TextareaField = forwardRef(function TextareaField(
+  { label, error, hint, required, id, className, ...props },
+  ref,
+) {
+  const inputId = id || props.name
+  return (
+    <FormField
+      label={label}
+      htmlFor={inputId}
+      hint={hint}
+      error={error}
+      required={required}
+      className={className}
+    >
+      <Textarea
+        ref={ref}
+        id={inputId}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+        {...props}
+      />
+    </FormField>
+  )
+})
+
+/**
+ * Presentational select for use with react-hook-form's `Controller` (Radix
+ * Select is controlled, so `register` cannot be spread onto it).
+ *
+ * `options` are `{ value, label, disabled? }`; use a non-empty sentinel such as
+ * `"all"` for "no filter" items — Radix forbids empty-string item values.
+ */
+export function SelectField({
+  label,
+  error,
+  hint,
+  required,
+  id,
+  name,
+  value,
+  onValueChange,
+  onBlur,
+  disabled,
+  placeholder,
+  options,
+  children,
+  className,
+}) {
+  const selectId = id || name
+  return (
+    <FormField
+      label={label}
+      htmlFor={selectId}
+      hint={hint}
+      error={error}
+      required={required}
+      className={className}
+    >
+      <Select value={value ?? ''} onValueChange={onValueChange} disabled={disabled}>
+        <SelectTrigger
+          id={selectId}
+          onBlur={onBlur}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${selectId}-error` : hint ? `${selectId}-hint` : undefined}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options
+            ? options.map((option) => (
+                <SelectItem key={option.value} value={option.value} disabled={option.disabled}>
+                  {option.label}
+                </SelectItem>
+              ))
+            : children}
+        </SelectContent>
+      </Select>
+    </FormField>
+  )
+}
 
 /** Non-field form error banner (bad credentials, server failure, …). */
 export function FormError({ id, className, children }) {

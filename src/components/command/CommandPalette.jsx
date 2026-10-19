@@ -5,7 +5,7 @@ import { Languages, LogOut, Moon, Search, Sun, User as UserIcon } from 'lucide-r
 import { filterNavByPermissions, navSections } from '@/config/nav'
 import { authApi } from '@/lib/api/endpoints'
 import { useAuthStore } from '@/store/auth'
-import { useThemeStore } from '@/store/theme'
+import { useThemeStore, resolveIsDark } from '@/store/theme'
 import { cn } from '@/lib/utils/cn'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 
@@ -15,6 +15,8 @@ export function CommandPalette({ open, onOpenChange }) {
   const hasPermission = useAuthStore((s) => s.hasPermission)
   const clear = useAuthStore((s) => s.clear)
   const setTheme = useThemeStore((s) => s.setTheme)
+  // Subscribing keeps the palette's icon in sync when the theme changes.
+  const theme = useThemeStore((s) => s.theme)
 
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
@@ -64,8 +66,7 @@ export function CommandPalette({ open, onOpenChange }) {
       })),
     )
 
-    const isDark =
-      typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+    const isDark = resolveIsDark(theme)
 
     const actions = [
       {
@@ -80,7 +81,12 @@ export function CommandPalette({ open, onOpenChange }) {
         group: t('command.actions'),
         label: t('theme.toggle'),
         icon: isDark ? Sun : Moon,
-        run: () => setTheme(isDark ? 'light' : 'dark'),
+        // Resolve at call time from the store snapshot so repeated toggles keep
+        // working (a captured value would go stale after the first flip).
+        run: () => {
+          const darkNow = resolveIsDark(useThemeStore.getState().theme)
+          setTheme(darkNow ? 'light' : 'dark')
+        },
       },
       {
         id: 'action-language',
@@ -99,7 +105,7 @@ export function CommandPalette({ open, onOpenChange }) {
     ]
 
     return [...navItems, ...actions]
-  }, [hasPermission, navigate, setTheme, i18n, t, handleSignOut])
+  }, [hasPermission, navigate, setTheme, i18n, t, handleSignOut, theme])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
