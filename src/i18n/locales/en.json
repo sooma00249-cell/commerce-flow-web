@@ -24,6 +24,21 @@
     "page": "Page {{page}} of {{total}}",
     "showing": "Showing {{count}} of {{total}}"
   },
+  "table": {
+    "range": "Showing {{start}}–{{end}} of {{total}}",
+    "rowsPerPage": "Rows per page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "clearSearch": "Clear search"
+  },
+  "command": {
+    "title": "Command palette",
+    "description": "Search pages and actions",
+    "placeholder": "Search or jump to…",
+    "navigate": "Go to",
+    "actions": "Actions",
+    "noResults": "No results found"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "catalog": "Catalog",
@@ -75,8 +90,14 @@
   "errors": {
     "notFoundTitle": "Page not found",
     "notFoundBody": "The page you are looking for does not exist or has moved.",
+    "notFound": "Not found.",
     "goHome": "Go to dashboard",
     "server": "Server error. Please try again.",
-    "network": "Network unreachable. Check your connection."
+    "network": "Network unreachable. Check your connection.",
+    "forbidden": "You do not have permission to do that.",
+    "forbiddenTitle": "Access denied",
+    "forbiddenBody": "You don't have permission to view this page. Contact an administrator if you think this is a mistake.",
+    "boundaryTitle": "Something broke",
+    "boundaryBody": "An unexpected error occurred. You can retry, or go back to the dashboard."
   }
 }

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Menu, User as UserIcon } from 'lucide-react'
+import { LogOut, Menu, Search, User as UserIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
@@ -22,7 +22,13 @@ function initials(user) {
   return `${user.firstname?.[0] ?? ''}${user.lastname?.[0] ?? ''}`.toUpperCase() || '?'
 }
 
-export function Topbar({ onOpenNav }) {
+/** Platform-correct shortcut hint for the command palette button. */
+function commandHint() {
+  if (typeof navigator === 'undefined') return 'Ctrl K'
+  return /mac|iphone|ipad/i.test(navigator.userAgent) ? '⌘K' : 'Ctrl K'
+}
+
+export function Topbar({ onOpenNav, onOpenCommand }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
@@ -56,6 +62,19 @@ export function Topbar({ onOpenNav }) {
       </div>
 
       <div className="ms-auto flex items-center gap-0.5 sm:gap-1">
+        <Button
+          variant="outline"
+          onClick={onOpenCommand}
+          aria-label={t('command.placeholder')}
+          className="me-1 h-8 gap-2 px-2 text-muted-foreground sm:h-9 sm:px-3"
+        >
+          <Search className="size-4 shrink-0" aria-hidden="true" />
+          <span className="hidden lg:inline">{t('command.placeholder')}</span>
+          <kbd className="hidden select-none rounded border bg-muted px-1 py-0.5 text-[10px] font-medium sm:inline-block">
+            {commandHint()}
+          </kbd>
+        </Button>
+
         <LanguageToggle />
         <ThemeToggle />
 

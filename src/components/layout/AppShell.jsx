@@ -1,10 +1,27 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
+import { CommandPalette } from '@/components/command/CommandPalette'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
+import { isCommandPaletteShortcut } from '@/lib/shortcuts'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
 
 export function AppShell() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [commandOpen, setCommandOpen] = useState(false)
+  const location = useLocation()
+
+  // Global Ctrl/Cmd+K shortcut for the command palette.
+  useEffect(() => {
+    function onKeyDown(event) {
+      if (isCommandPaletteShortcut(event)) {
+        event.preventDefault()
+        setCommandOpen((open) => !open)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   return (
     <div className="min-h-svh bg-background">
@@ -18,14 +35,18 @@ export function AppShell() {
       <Sidebar mobileOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
 
       <div className="lg:ps-64">
-        <Topbar onOpenNav={() => setMobileNavOpen(true)} />
+        <Topbar onOpenNav={() => setMobileNavOpen(true)} onOpenCommand={() => setCommandOpen(true)} />
         <main
           id="content"
           className="mx-auto w-full max-w-screen-2xl p-4 sm:p-6 lg:p-8 3xl:max-w-[110rem]"
         >
-          <Outlet />
+          <ErrorBoundary resetKeys={[location.pathname]}>
+            <Outlet />
+          </ErrorBoundary>
         </main>
       </div>
+
+      <CommandPalette open={commandOpen} onOpenChange={setCommandOpen} />
     </div>
   )
 }

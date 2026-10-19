@@ -10,15 +10,29 @@ export const RTL_LANGUAGES = ['ar']
 
 export const LANG_STORAGE_KEY = 'cf-lang'
 
-export function isRTL(lang) {
-  return RTL_LANGUAGES.includes(lang)
+/** Normalise 'ar-SA', 'en-GB' … to a supported base language. */
+export function normalizeLanguage(value) {
+  const candidate = String(value || '').toLowerCase()
+  if (!candidate) return null
+  if (SUPPORTED_LANGUAGES.includes(candidate)) return candidate
+  const base = candidate.split('-')[0]
+  return SUPPORTED_LANGUAGES.includes(base) ? base : null
 }
 
-/** Reflect the active language on <html> (lang + dir) for CSS/a11y/SEO. */
+export function isRTL(lang) {
+  const base = String(lang || '').toLowerCase().split('-')[0]
+  return RTL_LANGUAGES.includes(base)
+}
+
+/** Reflect the active language on <html> for CSS/a11y/SEO. No-op without a DOM. */
 export function applyDocumentLanguage(lang) {
+  const resolved = normalizeLanguage(lang) || 'en'
+  if (typeof document === 'undefined') return resolved
   const root = document.documentElement
-  root.setAttribute('lang', lang)
-  root.setAttribute('dir', isRTL(lang) ? 'rtl' : 'ltr')
+  root.setAttribute('lang', resolved)
+  root.setAttribute('dir', isRTL(resolved) ? 'rtl' : 'ltr')
+  root.setAttribute('data-lang', resolved)
+  return resolved
 }
 
 i18n
@@ -40,12 +54,22 @@ i18n
     },
   })
 
-const initialLang = i18n.resolvedLanguage || i18n.language || 'en'
-applyDocumentLanguage(initialLang)
+// Reflect the resolved language on <html> immediately at boot.
+applyDocumentLanguage(i18n.resolvedLanguage || i18n.language || 'en')
 
 i18n.on('languageChanged', (lang) => {
   applyDocumentLanguage(lang)
-  document.documentElement.setAttribute('data-lang', lang)
 })
+
+// Keep other open tabs in sync when the language changes in one of them.
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (event.key !== LANG_STORAGE_KEY) return
+    const next = normalizeLanguage(event.newValue)
+    if (next && next !== (i18n.resolvedLanguage || i18n.language)) {
+      i18n.changeLanguage(next)
+    }
+  })
+}
 
 export default i18n

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Commerce Flow — inventory & order management system" />
     <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Commerce Flow</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,24 +17,77 @@
     />
 
     <!--
-      Applied before first paint to avoid a flash of the wrong theme/locale.
-      Keep the storage keys in sync with src/store/theme.js and src/i18n.
+      Applies the stored theme + language BEFORE the first paint so there is no
+      flash of the wrong theme or text direction (FOUC / RTL flash).
+
+      Runs synchronously (no defer/async) and is wrapped defensively: if
+      localStorage or matchMedia is unavailable (private mode, blocked storage)
+      the static defaults on <html> still apply and the app corrects on mount.
+
+      KEEP THE STORAGE KEYS AND LOGIC IN SYNC WITH:
+        - src/store/theme.js        (cf-theme, THEMES, applyTheme)
+        - src/i18n/index.js         (cf-lang, SUPPORTED_LANGUAGES, isRTL, applyDocumentLanguage)
+      This is the only place that must stay valid JavaScript outside the bundle.
     -->
     <script>
       (function () {
+        var SUPPORTED_LANGUAGES = ['en', 'ar']
+        var THEMES = ['light', 'dark', 'system']
+        var THEME_KEY = 'cf-theme'
+        var LANG_KEY = 'cf-lang'
+
         try {
           var root = document.documentElement
-          var theme = localStorage.getItem('cf-theme') || 'system'
+
+          /* --- Theme --------------------------------------------------- */
+          var theme = localStorage.getItem(THEME_KEY)
+          if (THEMES.indexOf(theme) === -1) theme = 'system'
+
           var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
           var isDark = theme === 'dark' || (theme === 'system' && prefersDark)
-          root.classList.toggle('dark', isDark)
 
-          var lang = localStorage.getItem('cf-lang') || 'en'
-          var rtl = lang === 'ar'
+          root.classList.toggle('dark', isDark)
+          // Makes native UI (scrollbars, form controls, autofill) match the theme.
+          root.style.colorScheme = isDark ? 'dark' : 'light'
+          root.setAttribute('data-theme', theme)
+          // Helps mobile browsers tint the status bar / address bar.
+          var meta = document.querySelector('meta[name="theme-color"]')
+          if (meta) meta.setAttribute('content', isDark ? '#0a0a0a' : '#ffffff')
+
+          /* --- Language & direction ------------------------------------ */
+          // Match i18next's detector order: stored value first, then the user's
+          // browser languages, then English. Normalises 'ar-SA' / 'en-GB' to a
+          // supported language so `dir` is always correct.
+          var candidates = []
+          var stored = localStorage.getItem(LANG_KEY)
+          if (stored) candidates.push(stored)
+          if (navigator.languages && navigator.languages.length) {
+            for (var i = 0; i < navigator.languages.length; i++) candidates.push(navigator.languages[i])
+          } else if (navigator.language) {
+            candidates.push(navigator.language)
+          }
+
+          var lang = null
+          for (var j = 0; j < candidates.length; j++) {
+            var value = String(candidates[j] || '').toLowerCase()
+            if (!value) continue
+            if (SUPPORTED_LANGUAGES.indexOf(value) !== -1) {
+              lang = value
+              break
+            }
+            var base = value.split('-')[0]
+            if (SUPPORTED_LANGUAGES.indexOf(base) !== -1) {
+              lang = base
+              break
+            }
+          }
+          if (!lang) lang = 'en'
+
           root.setAttribute('lang', lang)
-          root.setAttribute('dir', rtl ? 'rtl' : 'ltr')
-        } catch (e) {
-          /* ignore */
+          root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr')
+          root.setAttribute('data-lang', lang)
+        } catch (err) {
+          /* Storage or matchMedia unavailable — static defaults on <html> apply. */
         }
       })()
     </script>

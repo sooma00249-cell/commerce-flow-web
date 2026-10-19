@@ -1,5 +1,6 @@
 import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { AppProviders } from './providers'
 import { router } from './router'
 import { useThemeStore } from '@/store/theme'
@@ -9,13 +10,10 @@ export default function App() {
 
   return (
     <AppProviders>
-      <RouterProvider router={router} />
-      <Toaster
-        richColors
-        closeButton
-        position="top-center"
-        theme={theme === 'system' ? 'system' : theme}
-      />
+      <ErrorBoundary>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
+      <Toaster richColors closeButton position="top-center" theme={theme} />
     </AppProviders>
   )
 }
