@@ -46,7 +46,6 @@ function SortHeader({ header }) {
   const canSort = header.column.getCanSort()
   const sorted = header.column.getIsSorted()
   const label = flexRender(header.column.columnDef.header, header.getContext())
-
   if (!canSort) return <span>{label}</span>
 
   const Icon = sorted === 'asc' ? ArrowUp : sorted === 'desc' ? ArrowDown : ArrowUpDown
@@ -238,7 +237,7 @@ export function DataTable({
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const column = header.column.columnDef
-                  const align = column.meta?.align || 'start'
+                  const align = column.meta?.align || 'start'                  
                   return (
                     <th
                       key={header.id}

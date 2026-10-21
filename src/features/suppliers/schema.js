@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 export const SUPPLIER_STATUSES = ['active', 'inactive']
 
+export const ADDRESS_KEYS = ['street', 'city', 'state', 'zipCode', 'country']
+
 const PHONE_PATTERN = /^\+?\d{7,15}$/
 
 /** Digits-only phone check (spaces, dashes, parens and dots are stripped). */
@@ -13,22 +15,34 @@ const phoneField = z
     message: 'validation.phone',
   })
 
-export const supplierSchema = z.object({
-  name: z.string().trim().min(1, 'validation.required'),
-  email: z.string().trim().min(1, 'validation.required').email('validation.email'),
-  phone: phoneField,
-  status: z.enum(SUPPLIER_STATUSES),
-  hasAddress: z.boolean(),
-  address: z
-    .object({
-      street: z.string().trim().max(200, 'validation.maxLength'),
-      city: z.string().trim().max(100, 'validation.maxLength'),
-      state: z.string().trim().max(100, 'validation.maxLength'),
-      zipCode: z.string().trim().max(20, 'validation.maxLength'),
-      country: z.string().trim().max(100, 'validation.maxLength'),
-    })
-    .optional(),
+const addressSchema = z.object({
+  street: z.string().trim().max(200, 'validation.maxLength'),
+  city: z.string().trim().max(100, 'validation.maxLength'),
+  state: z.string().trim().max(100, 'validation.maxLength'),
+  zipCode: z.string().trim().max(20, 'validation.maxLength'),
+  country: z.string().trim().max(100, 'validation.maxLength'),
 })
+
+export const supplierSchema = z
+  .object({
+    name: z.string().trim().min(1, 'validation.required'),
+    email: z.string().trim().min(1, 'validation.required').email('validation.email'),
+    phone: phoneField,
+    status: z.enum(SUPPLIER_STATUSES),
+    hasAddress: z.boolean(),
+    address: addressSchema.optional(),
+  })
+  // The API rejects a partially filled address as a single error on the
+  // `address` object, which would be invisible next to the inputs. Requiring
+  // every key here keeps the message on the field that is actually missing.
+  .superRefine((values, ctx) => {
+    if (!values.hasAddress) return
+    for (const key of ADDRESS_KEYS) {
+      if (!String(values.address?.[key] ?? '').trim()) {
+        ctx.addIssue({ code: 'custom', path: ['address', key], message: 'validation.required' })
+      }
+    }
+  })
 
 const EMPTY_ADDRESS = { street: '', city: '', state: '', zipCode: '', country: '' }
 

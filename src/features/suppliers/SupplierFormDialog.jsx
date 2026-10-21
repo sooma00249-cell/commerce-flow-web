@@ -17,9 +17,13 @@ import { FormError, SelectField, TextField } from '@/components/form/FormField'
 import { applyApiErrors } from '@/components/form/useApiFormErrors'
 import { toastError, toastSuccess } from '@/lib/toast'
 import { useCreateSupplier, useUpdateSupplier } from './api'
-import { SUPPLIER_STATUSES, buildSupplierPayload, supplierDefaults, supplierSchema } from './schema'
-
-const ADDRESS_FIELDS = ['street', 'city', 'state', 'zipCode', 'country']
+import {
+  ADDRESS_KEYS,
+  SUPPLIER_STATUSES,
+  buildSupplierPayload,
+  supplierDefaults,
+  supplierSchema,
+} from './schema'
 
 function SupplierForm({ supplier, onOpenChange }) {
   const { t } = useTranslation()
@@ -121,7 +125,9 @@ function SupplierForm({ supplier, onOpenChange }) {
           <div className="flex items-center justify-between gap-4 rounded-md border p-3">
             <Label htmlFor="supplier-address">
               {t('address.add')}
-              <span className="ms-1 text-muted-foreground">({t('common.optional')})</span>
+              {hasAddress ? null : (
+                <span className="ms-1 text-muted-foreground">({t('common.optional')})</span>
+              )}
             </Label>
             <Switch
               id="supplier-address"
@@ -135,19 +141,21 @@ function SupplierForm({ supplier, onOpenChange }) {
 
       {hasAddress ? (
         <div className="grid gap-4 sm:grid-cols-2">
-          {ADDRESS_FIELDS.map((key) => (
+          {ADDRESS_KEYS.map((key) => (
             <TextField
               key={key}
               label={t(`address.${key}`)}
+              required
               {...register(`address.${key}`)}
               error={errors.address?.[key]?.message && t(errors.address[key].message)}
               className={key === 'street' ? 'sm:col-span-2' : undefined}
             />
           ))}
+          {/* Server-side fallback: the API reports an incomplete address as one
+              error on the `address` object instead of per field. */}
+          <FormError className="sm:col-span-2">{errors.address?.message}</FormError>
         </div>
       ) : null}
-
-      <FormError>{errors.root?.message}</FormError>
 
       <DialogFooter>
         <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

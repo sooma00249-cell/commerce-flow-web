@@ -16,7 +16,7 @@ export function FormField({ label, htmlFor, hint, error, required, children, cla
 
   return (
     <div className={cn('space-y-2', className)}>
-      <Label htmlFor={htmlFor}>
+      <Label htmlFor={htmlFor} className={cn(error && 'text-destructive')}>
         {label}
         {required ? (
           <span aria-hidden="true" className="ms-1 text-destructive">
