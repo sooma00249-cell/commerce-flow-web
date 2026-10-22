@@ -14,7 +14,7 @@ export function SpecificationsEditor({ specKeys = [], value = {}, onChange, disa
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       {specKeys.map((key) => (
         <div key={key} className="space-y-2">
           <Label htmlFor={`spec-${key}`} className="capitalize">

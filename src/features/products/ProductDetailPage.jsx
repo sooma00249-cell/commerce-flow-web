@@ -7,12 +7,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatCurrency, formatDateTime, formatNumber } from '@/lib/format'
+import { cn } from '@/lib/utils/cn'
 import { useAuthStore } from '@/store/auth'
 import { useProduct } from './api'
 
-function Detail({ label, children }) {
+function Detail({ label, children, className }) {
   return (
-    <div className="space-y-1">
+    <div className={cn('space-y-1', className)}>
       <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </dt>
@@ -94,7 +95,7 @@ export default function ProductDetailPage() {
             <CardTitle>{t('products.sections.basics')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="grid gap-4 sm:grid-cols-2">
+            <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
               <Detail label={t('products.fields.status')}>
                 <StatusBadge status={product.status} />
               </Detail>
@@ -117,7 +118,7 @@ export default function ProductDetailPage() {
                   {formatNumber(product.lowStockThreshold, locale)}
                 </span>
               </Detail>
-              <Detail label={t('products.fields.description')}>
+              <Detail label={t('products.fields.description')} className="sm:col-span-2">
                 <span className="whitespace-pre-line">
                   {product.description || <span className="text-muted-foreground">—</span>}
                 </span>
@@ -163,7 +164,7 @@ export default function ProductDetailPage() {
             <CardTitle>{t('products.sections.specifications')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
               {specifications.map(([key, value]) => (
                 <Detail key={key} label={key}>
                   {value}

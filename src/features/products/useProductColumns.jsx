@@ -5,8 +5,10 @@ import { Badge } from '@/components/ui/badge'
 import { EntityThumbnail } from '@/components/common/EntityThumbnail'
 import { RowActionsMenu } from '@/components/common/RowActionsMenu'
 import { StatusBadge } from '@/components/common/StatusBadge'
-import { formatCurrency, formatNumber } from '@/lib/format'
+import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
 import { cn } from '@/lib/utils/cn'
+
+const MAX_VISIBLE_SPECS = 3
 
 /**
  * Builds the product table columns. Permission-sensitive columns (cost) and
@@ -36,10 +38,10 @@ export function useProductColumns({
           return (
             <div className="flex items-center gap-3">
               <EntityThumbnail src={product.images?.[0]} />
-              <div className="min-w-0">
+              <div className="min-w-0 max-w-[360px]">
                 <div className="truncate font-medium">{product.title}</div>
-                <div className="truncate text-xs text-muted-foreground md:hidden">
-                  {product.sku}
+                <div className="truncate text-xs text-muted-foreground">
+                  {product.description || product.sku}
                 </div>
               </div>
             </div>
@@ -62,6 +64,31 @@ export function useProductColumns({
         header: t('products.columns.category'),
         enableSorting: false,
         cell: ({ getValue }) => getValue() || <span className="text-muted-foreground">—</span>,
+      },
+      {
+        id: 'specifications',
+        accessorFn: (product) => Object.keys(product.specifications ?? {}).length,
+        header: t('products.sections.specifications'),
+        enableSorting: false,
+        meta: { hideBelow: 'xl' },
+        cell: ({ row }) => {
+          const specs = Object.entries(row.original.specifications ?? {})
+          if (specs.length === 0) {
+            return <span className="text-muted-foreground">—</span>
+          }
+          const visible = specs.slice(0, MAX_VISIBLE_SPECS)
+          const extra = specs.length - visible.length
+          return (
+            <div className="flex flex-wrap gap-1">
+              {visible.map(([key, value]) => (
+                <Badge key={key} variant="secondary" className="max-w-[220px] truncate">
+                  {key}: {value}
+                </Badge>
+              ))}
+              {extra > 0 ? <Badge variant="muted">+{extra}</Badge> : null}
+            </div>
+          )
+        },
       },
     ]
 
@@ -119,6 +146,28 @@ export function useProductColumns({
         header: t('products.columns.status'),
         enableSorting: false,
         cell: ({ getValue }) => <StatusBadge status={getValue()} />,
+      },
+      {
+        id: 'reserved',
+        accessorKey: 'reserved',
+        header: t('products.columns.reserved'),
+        enableSorting: false,
+        meta: { align: 'end', hideBelow: 'xl' },
+        cell: ({ getValue }) => (
+          <span className="tabular-nums text-muted-foreground">
+            {formatNumber(getValue() ?? 0, locale)}
+          </span>
+        ),
+      },
+      {
+        id: 'updatedAt',
+        accessorKey: 'updatedAt',
+        header: t('common.updatedAt'),
+        enableSorting: false,
+        meta: { hideBelow: '2xl' },
+        cell: ({ getValue }) => (
+          <span className="text-muted-foreground">{formatDate(getValue(), locale)}</span>
+        ),
       },
       {
         id: 'actions',

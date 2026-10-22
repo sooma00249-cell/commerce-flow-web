@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { Pencil, Trash2 } from 'lucide-react'
 import { RowActionsMenu } from '@/components/common/RowActionsMenu'
 import { StatusBadge } from '@/components/common/StatusBadge'
+import { formatDate } from '@/lib/format'
 
 export function useSupplierColumns({ canEdit, canDelete, onEdit, onDelete }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language
 
   return useMemo(
     () => [
@@ -18,7 +20,7 @@ export function useSupplierColumns({ canEdit, canDelete, onEdit, onDelete }) {
         cell: ({ row }) => (
           <div className="min-w-0">
             <div className="truncate font-medium">{row.original.name}</div>
-            <div className="truncate text-xs text-muted-foreground md:hidden">
+            <div className="truncate text-xs text-muted-foreground">
               {row.original.email}
             </div>
           </div>
@@ -58,6 +60,16 @@ export function useSupplierColumns({ canEdit, canDelete, onEdit, onDelete }) {
         cell: ({ getValue }) => <StatusBadge status={getValue()} />,
       },
       {
+        id: 'updatedAt',
+        accessorKey: 'updatedAt',
+        header: t('common.updatedAt'),
+        enableSorting: false,
+        meta: { hideBelow: 'xl' },
+        cell: ({ getValue }) => (
+          <span className="text-muted-foreground">{formatDate(getValue(), locale)}</span>
+        ),
+      },
+      {
         id: 'actions',
         header: '',
         enableSorting: false,
@@ -81,6 +93,6 @@ export function useSupplierColumns({ canEdit, canDelete, onEdit, onDelete }) {
         ),
       },
     ],
-    [t, canEdit, canDelete, onEdit, onDelete],
+    [t, locale, canEdit, canDelete, onEdit, onDelete],
   )
 }

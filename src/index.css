@@ -205,3 +205,17 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+
+/*
+  Unlayered on purpose: Radix locks the body scroll through react-remove-scroll,
+  which compensates the removed scrollbar with `margin-right`. In RTL the
+  scrollbar lives on the left, so the compensation has to move to the other side
+  — otherwise the content is squeezed on the right and the fixed sidebar
+  detaches from the topbar. Unlayered rules also win over the runtime style
+  Radix injects (same origin, higher specificity).
+*/
+html[dir='rtl'] body[data-scroll-locked] {
+  margin-right: 0 !important;
+  margin-left: var(--removed-body-scroll-bar-size, 0px) !important;
+}
+

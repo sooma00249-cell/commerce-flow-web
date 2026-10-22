@@ -1,7 +1,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { productApi, queryKeys } from '@/lib/api/endpoints'
 
-export function useProducts(params) {
+export function useProducts(params, options = {}) {
   return useQuery({
     queryKey: queryKeys.products(params),
     queryFn: async () => {
@@ -9,6 +9,7 @@ export function useProducts(params) {
       return { items: res.data ?? [], meta: res.meta }
     },
     placeholderData: keepPreviousData,
+    enabled: options.enabled ?? true,
   })
 }
 

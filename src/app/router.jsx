@@ -10,12 +10,25 @@ import ProductFormPage from '@/features/products/ProductFormPage'
 import ProductDetailPage from '@/features/products/ProductDetailPage'
 import CategoriesPage from '@/features/categories/CategoriesPage'
 import SuppliersPage from '@/features/suppliers/SuppliersPage'
+import SaleOrdersPage from '@/features/orders/SaleOrdersPage'
+import SaleOrderFormPage from '@/features/orders/SaleOrderFormPage'
+import SaleOrderDetailPage from '@/features/orders/SaleOrderDetailPage'
+import PurchaseOrdersPage from '@/features/orders/PurchaseOrdersPage'
+import PurchaseOrderFormPage from '@/features/orders/PurchaseOrderFormPage'
 import PlaceholderPage from '@/features/misc/PlaceholderPage'
 import NotFoundPage from '@/features/misc/NotFoundPage'
 
 // Sections that are wired in the navigation but not implemented yet render a
 // placeholder so the shell is fully navigable during early phases.
-const implemented = new Set(['/', '/products', '/categories', '/suppliers', '/profile'])
+const implemented = new Set([
+  '/',
+  '/products',
+  '/categories',
+  '/suppliers',
+  '/sale-orders',
+  '/purchase-orders',
+  '/profile',
+])
 
 const placeholderRoutes = navSections
   .flatMap((section) => section.items)
@@ -81,6 +94,46 @@ export const router = createBrowserRouter([
         element: (
           <RequirePermission permission="suppliers:read">
             <SuppliersPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sale-orders',
+        element: (
+          <RequirePermission permission={['saleOrders:readAll', 'saleOrders:create', 'saleOrders:updateStatus']}>
+            <SaleOrdersPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sale-orders/new',
+        element: (
+          <RequirePermission permission="saleOrders:create">
+            <SaleOrderFormPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sale-orders/:id',
+        element: (
+          <RequirePermission permission={['saleOrders:readAll', 'saleOrders:create', 'saleOrders:updateStatus']}>
+            <SaleOrderDetailPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'purchase-orders',
+        element: (
+          <RequirePermission permission="purchaseOrders:read">
+            <PurchaseOrdersPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'purchase-orders/new',
+        element: (
+          <RequirePermission permission="purchaseOrders:create">
+            <PurchaseOrderFormPage />
           </RequirePermission>
         ),
       },

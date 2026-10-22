@@ -1,8 +1,9 @@
 import { z } from 'zod'
+import { ADDRESS_KEYS } from '@/lib/address'
+
+export { ADDRESS_KEYS }
 
 export const SUPPLIER_STATUSES = ['active', 'inactive']
-
-export const ADDRESS_KEYS = ['street', 'city', 'state', 'zipCode', 'country']
 
 const PHONE_PATTERN = /^\+?\d{7,15}$/
 
@@ -16,11 +17,11 @@ const phoneField = z
   })
 
 const addressSchema = z.object({
-  street: z.string().trim().max(200, 'validation.maxLength'),
-  city: z.string().trim().max(100, 'validation.maxLength'),
-  state: z.string().trim().max(100, 'validation.maxLength'),
-  zipCode: z.string().trim().max(20, 'validation.maxLength'),
-  country: z.string().trim().max(100, 'validation.maxLength'),
+  street: z.string().trim().max(200, { error: 'validation.maxLength', max: 200 }),
+  city: z.string().trim().max(100, { error: 'validation.maxLength', max: 100 }),
+  state: z.string().trim().max(100, { error: 'validation.maxLength', max: 100 }),
+  zipCode: z.string().trim().max(20, { error: 'validation.maxLength', max: 20 }),
+  country: z.string().trim().max(100, { error: 'validation.maxLength', max: 100 }),
 })
 
 export const supplierSchema = z

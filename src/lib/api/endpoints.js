@@ -15,7 +15,6 @@ export const queryKeys = {
   saleOrders: (params) => ['sale-orders', params],
   saleOrder: (id) => ['sale-orders', 'detail', id],
   purchaseOrders: (params) => ['purchase-orders', params],
-  purchaseOrder: (id) => ['purchase-orders', 'detail', id],
   inventory: (params) => ['inventory', params],
 }
 
@@ -82,7 +81,6 @@ export const saleOrderApi = {
 
 export const purchaseOrderApi = {
   list: (query) => get('/purchase-orders', { query }),
-  getById: (id) => get(`/purchase-orders/${id}`),
   create: (data) => post('/purchase-orders', data),
   updateStatus: (id, status) => patch(`/purchase-orders/${id}/status`, { status }),
 }

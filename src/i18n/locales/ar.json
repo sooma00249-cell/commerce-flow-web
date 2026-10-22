@@ -114,7 +114,9 @@
     "delivered": "تم التسليم",
     "cancelled": "ملغى",
     "ordered": "تم الطلب",
-    "received": "تم الاستلام"
+    "received": "تم الاستلام",
+    "failed": "فشل",
+    "refunded": "تم الاسترداد"
   },
   "address": {
     "street": "الشارع",
@@ -164,7 +166,8 @@
       "price": "السعر",
       "cost": "التكلفة",
       "stock": "المخزون",
-      "status": "الحالة"
+      "status": "الحالة",
+      "reserved": "محجوز"
     },
     "fields": {
       "title": "الاسم",
@@ -267,6 +270,95 @@
       "status": "الحالة",
       "hasAddress": "هذا المورّد لديه عنوان للفوترة"
     }
+  },
+  "orders": {
+    "items": "العناصر",
+    "quantity": "الكمية",
+    "lineTotal": "إجمالي السطر",
+    "total": "الإجمالي",
+    "stock": "المخزون",
+    "available": "المتاح",
+    "itemsEmpty": "لا توجد عناصر بعد — ابحث عن منتج أعلاه لإضافته.",
+    "itemsRequired": "أضف عنصرًا واحدًا على الأقل",
+    "unknownProduct": "منتج غير معروف",
+    "unknownSupplier": "مورد غير معروف",
+    "noProducts": "لم يتم العثور على منتجات",
+    "noProductsInStock": "لا توجد منتجات متوفرة في المخزون",
+    "insufficientStock": "المتوفر في المخزون {{available}} فقط",
+    "searching": "جارٍ البحث…",
+    "searchProducts": "ابحث عن منتج بالاسم أو رمز SKU…",
+    "removeItem": "إزالة العنصر",
+    "setStatus": "تغيير الحالة إلى {{status}}",
+    "statusChanged": "تم تغيير الحالة إلى {{status}}",
+    "cancelTitle": "إلغاء الطلب",
+    "cancelBody": "هل تريد إلغاء الطلب #{{reference}}؟ لا يمكن التراجع عن ذلك.",
+    "cancelAction": "إلغاء الطلب",
+    "notFound": "تعذّر العثور على هذا الطلب.",
+    "actionsLabel": "إجراءات الطلب",
+    "unitPriceFromCatalog": "يتم أخذ سعر الوحدة من كتالوج المنتجات.",
+    "unitCostFromCatalog": "يتم أخذ تكلفة الوحدة من كتالوج المنتجات.",
+    "costHidden": "مخفي",
+    "customerIsYou": "سيتم إنشاء الطلب باسم حسابك.",
+    "paymentMethods": {
+      "cod": "الدفع عند الاستلام",
+      "stripe": "Stripe",
+      "card": "بطاقة",
+      "paypal": "PayPal"
+    },
+    "columns": {
+      "order": "الطلب",
+      "customer": "العميل",
+      "supplier": "المورد",
+      "items": "العناصر",
+      "total": "الإجمالي",
+      "status": "الحالة",
+      "createdAt": "تاريخ الإنشاء",
+      "paidAt": "تاريخ الدفع",
+      "shippedAt": "تاريخ الشحن",
+      "deliveredAt": "تاريخ التسليم",
+      "receivedAt": "تاريخ الاستلام",
+      "expectedDelivery": "التسليم المتوقع",
+      "payment": "الدفع",
+      "orderedAt": "تاريخ الطلب",
+      "shipTo": "التوصيل إلى"
+    },
+    "sections": {
+      "items": "العناصر",
+      "customer": "العميل",
+      "supplier": "المورد",
+      "address": "عنوان الشحن",
+      "details": "التفاصيل"
+    },
+    "fields": {
+      "customer": "العميل",
+      "customerPlaceholder": "اختر عميلًا",
+      "supplier": "المورد",
+      "supplierPlaceholder": "اختر موردًا",
+      "paymentMethod": "طريقة الدفع",
+      "paymentStatus": "حالة الدفع",
+      "expectedDelivery": "تاريخ التسليم المتوقع",
+      "expectedDeliveryHint": "اختياري — متى يُتوقع وصول الطلب."
+    }
+  },
+  "saleOrders": {
+    "title": "طلبات البيع",
+    "subtitle": "تتبّع طلبات العملاء من الدفع حتى التسليم.",
+    "new": "طلب بيع جديد",
+    "create": "إنشاء الطلب",
+    "searchPlaceholder": "ابحث بالعميل أو المنتج أو رقم الطلب…",
+    "emptyTitle": "لا توجد طلبات بيع بعد",
+    "created": "تم إنشاء طلب البيع",
+    "backToList": "العودة إلى طلبات البيع"
+  },
+  "purchaseOrders": {
+    "title": "طلبات الشراء",
+    "subtitle": "أنشئ وتابع طلبات إعادة التوريد لمورديك.",
+    "new": "طلب شراء جديد",
+    "create": "إنشاء الطلب",
+    "searchPlaceholder": "ابحث بالمورد أو المنتج أو رقم الطلب…",
+    "emptyTitle": "لا توجد طلبات شراء بعد",
+    "created": "تم إنشاء طلب الشراء",
+    "backToList": "العودة إلى طلبات الشراء"
   },
   "errors": {
     "notFoundTitle": "الصفحة غير موجودة",

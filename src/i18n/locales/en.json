@@ -114,7 +114,9 @@
     "delivered": "Delivered",
     "cancelled": "Cancelled",
     "ordered": "Ordered",
-    "received": "Received"
+    "received": "Received",
+    "failed": "Failed",
+    "refunded": "Refunded"
   },
   "address": {
     "street": "Street",
@@ -164,7 +166,8 @@
       "price": "Price",
       "cost": "Cost",
       "stock": "Stock",
-      "status": "Status"
+      "status": "Status",
+      "reserved": "Reserved"
     },
     "fields": {
       "title": "Title",
@@ -267,6 +270,95 @@
       "status": "Status",
       "hasAddress": "This supplier has a billing address"
     }
+  },
+  "orders": {
+    "items": "Items",
+    "quantity": "Quantity",
+    "lineTotal": "Line total",
+    "total": "Total",
+    "stock": "Stock",
+    "available": "Available",
+    "itemsEmpty": "No items yet — search for a product above to add one.",
+    "itemsRequired": "Add at least one item",
+    "unknownProduct": "Unknown product",
+    "unknownSupplier": "Unknown supplier",
+    "noProducts": "No products found",
+    "noProductsInStock": "No products left in stock",
+    "insufficientStock": "Only {{available}} left in stock",
+    "searching": "Searching…",
+    "searchProducts": "Search products by title or SKU…",
+    "removeItem": "Remove item",
+    "setStatus": "Mark as {{status}}",
+    "statusChanged": "Status changed to {{status}}",
+    "cancelTitle": "Cancel order",
+    "cancelBody": "Cancel order #{{reference}}? This cannot be undone.",
+    "cancelAction": "Cancel order",
+    "notFound": "This order could not be found.",
+    "actionsLabel": "Order actions",
+    "unitPriceFromCatalog": "Unit prices are taken from the product catalog.",
+    "unitCostFromCatalog": "Unit costs are taken from the product catalog.",
+    "costHidden": "Hidden",
+    "customerIsYou": "The order will be created for your own account.",
+    "paymentMethods": {
+      "cod": "Cash on delivery",
+      "stripe": "Stripe",
+      "card": "Card",
+      "paypal": "PayPal"
+    },
+    "columns": {
+      "order": "Order",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "items": "Items",
+      "total": "Total",
+      "status": "Status",
+      "createdAt": "Created",
+      "paidAt": "Paid at",
+      "shippedAt": "Shipped at",
+      "deliveredAt": "Delivered at",
+      "receivedAt": "Received at",
+      "expectedDelivery": "Expected delivery",
+      "payment": "Payment",
+      "orderedAt": "Ordered at",
+      "shipTo": "Ship to"
+    },
+    "sections": {
+      "items": "Items",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "address": "Shipping address",
+      "details": "Details"
+    },
+    "fields": {
+      "customer": "Customer",
+      "customerPlaceholder": "Select a customer",
+      "supplier": "Supplier",
+      "supplierPlaceholder": "Select a supplier",
+      "paymentMethod": "Payment method",
+      "paymentStatus": "Payment status",
+      "expectedDelivery": "Expected delivery date",
+      "expectedDeliveryHint": "Optional — when the order is expected to arrive."
+    }
+  },
+  "saleOrders": {
+    "title": "Sale orders",
+    "subtitle": "Track customer orders from payment to delivery.",
+    "new": "New sale order",
+    "create": "Create order",
+    "searchPlaceholder": "Search by customer, product or order id…",
+    "emptyTitle": "No sale orders yet",
+    "created": "Sale order created",
+    "backToList": "Back to sale orders"
+  },
+  "purchaseOrders": {
+    "title": "Purchase orders",
+    "subtitle": "Raise and track restock orders for your suppliers.",
+    "new": "New purchase order",
+    "create": "Create order",
+    "searchPlaceholder": "Search by supplier, product or order id…",
+    "emptyTitle": "No purchase orders yet",
+    "created": "Purchase order created",
+    "backToList": "Back to purchase orders"
   },
   "errors": {
     "notFoundTitle": "Page not found",

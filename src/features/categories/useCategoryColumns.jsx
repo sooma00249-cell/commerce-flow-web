@@ -5,11 +5,13 @@ import { Badge } from '@/components/ui/badge'
 import { EntityThumbnail } from '@/components/common/EntityThumbnail'
 import { RowActionsMenu } from '@/components/common/RowActionsMenu'
 import { StatusBadge } from '@/components/common/StatusBadge'
+import { formatDate } from '@/lib/format'
 
 const MAX_VISIBLE_SPEC_KEYS = 3
 
 export function useCategoryColumns({ canEdit, canDelete, onEdit, onDelete }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language
 
   return useMemo(
     () => [
@@ -24,7 +26,7 @@ export function useCategoryColumns({ canEdit, canDelete, onEdit, onDelete }) {
             <EntityThumbnail src={row.original.image} kind="category" />
             <div className="min-w-0">
               <div className="truncate font-medium">{row.original.title}</div>
-              <div className="truncate font-mono text-xs text-muted-foreground md:hidden">
+              <div className="truncate font-mono text-xs text-muted-foreground">
                 {row.original.slug}
               </div>
             </div>
@@ -73,6 +75,16 @@ export function useCategoryColumns({ canEdit, canDelete, onEdit, onDelete }) {
         cell: ({ getValue }) => <StatusBadge status={getValue()} />,
       },
       {
+        id: 'updatedAt',
+        accessorKey: 'updatedAt',
+        header: t('common.updatedAt'),
+        enableSorting: false,
+        meta: { hideBelow: 'xl' },
+        cell: ({ getValue }) => (
+          <span className="text-muted-foreground">{formatDate(getValue(), locale)}</span>
+        ),
+      },
+      {
         id: 'actions',
         header: '',
         enableSorting: false,
@@ -96,6 +108,6 @@ export function useCategoryColumns({ canEdit, canDelete, onEdit, onDelete }) {
         ),
       },
     ],
-    [t, canEdit, canDelete, onEdit, onDelete],
+    [t, locale, canEdit, canDelete, onEdit, onDelete],
   )
 }

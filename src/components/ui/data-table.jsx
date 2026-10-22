@@ -42,6 +42,16 @@ const tableFeatureSet = tableFeatures({
 
 const DEFAULT_PAGE_SIZE = 20
 
+/**
+ * Columns can ask to be hidden below a breakpoint (`meta.hideBelow`) so wide
+ * screens can show extra data instead of empty space.
+ */
+const HIDE_BELOW_CLASS = {
+  lg: 'hidden lg:table-cell',
+  xl: 'hidden xl:table-cell',
+  '2xl': 'hidden 2xl:table-cell',
+}
+
 function SortHeader({ header }) {
   const canSort = header.column.getCanSort()
   const sorted = header.column.getIsSorted()
@@ -182,6 +192,15 @@ export function DataTable({
   const leafColumns = table.getAllLeafColumns()
   const visibleColumns = leafColumns.filter((column) => column.getIsVisible())
 
+  /*
+    The table always fills its card, so the browser would spread the leftover
+    width over every column and leave dead bands between them. The primary
+    (entity) column takes the whole remainder instead, which keeps the other
+    columns as narrow as their content.
+  */
+  const growColumnId =
+    visibleColumns.find((column) => column.columnDef.meta?.primary)?.id ?? visibleColumns[0]?.id
+
   // Typing a new search must not leave you stranded on page 5 of the old
   // results — reset the page in the same event as the search change.
   const searchValue = search?.value ?? ''
@@ -237,7 +256,8 @@ export function DataTable({
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const column = header.column.columnDef
-                  const align = column.meta?.align || 'start'                  
+                  const align = column.meta?.align || 'start'
+                  const hideBelow = column.meta?.hideBelow
                   return (
                     <th
                       key={header.id}
@@ -254,6 +274,8 @@ export function DataTable({
                       className={cn(
                         'whitespace-nowrap px-3 py-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground',
                         align === 'end' ? 'text-end' : 'text-start',
+                        hideBelow && HIDE_BELOW_CLASS[hideBelow],
+                        header.column.id === growColumnId && 'w-full',
                       )}
                     >
                       {header.isPlaceholder ? null : <SortHeader header={header} />}
@@ -279,10 +301,16 @@ export function DataTable({
                   {row.getVisibleCells().map((cell) => {
                     const column = cell.column.columnDef
                     const align = column.meta?.align || 'start'
+                    const hideBelow = column.meta?.hideBelow
                     return (
                       <td
                         key={cell.id}
-                        className={cn('px-3 py-3 align-middle', align === 'end' ? 'text-end' : 'text-start')}
+                        className={cn(
+                          'px-3 py-3 align-middle',
+                          align === 'end' ? 'text-end' : 'text-start',
+                          hideBelow && HIDE_BELOW_CLASS[hideBelow],
+                          cell.column.id === growColumnId && 'w-full',
+                        )}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>

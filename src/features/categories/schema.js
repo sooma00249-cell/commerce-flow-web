@@ -3,7 +3,11 @@ import { z } from 'zod'
 export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export const categorySchema = z.object({
-  title: z.string().trim().min(1, 'validation.required').max(120, 'validation.maxLength'),
+  title: z
+    .string()
+    .trim()
+    .min(1, 'validation.required')
+    .max(120, { error: 'validation.maxLength', max: 120 }),
   slug: z
     .string()
     .trim()
